@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indranil Multi-Track Music Production Studio</title>
+<style>
+:root{--bg:#0b1020;--panel:#131b2e;--panel2:#19243a;--line:#2a3854;--text:#edf2ff;--muted:#9aabc8;--accent:#7c9cff;--accent2:#39d6b4;--danger:#ff6b7d;--gold:#ffc66d}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,#1b2b4b 0,#0b1020 42%);color:var(--text);font:14px/1.45 Inter,Segoe UI,Arial,sans-serif}
+button,input,select{font:inherit}button{border:1px solid var(--line);background:#202d47;color:var(--text);padding:9px 12px;border-radius:9px;cursor:pointer;transition:.15s}button:hover{border-color:var(--accent);background:#2a3b5d}button.primary{background:linear-gradient(135deg,#557df3,#765be8);border:0}button.good{background:#126b5b;border:0}button.danger{background:#542635;border-color:#844252}button:disabled{opacity:.45;cursor:not-allowed}
+header{padding:20px 24px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:13px}.logo{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,#527dff,#31d2b3);display:grid;place-items:center;font-size:22px;font-weight:900;color:#071322;box-shadow:0 8px 30px #527dff44}.brand h1{font-size:19px;margin:0;letter-spacing:.2px}.brand p{margin:3px 0 0;color:var(--muted);font-size:12px}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap}.wrap{max-width:1600px;margin:auto;padding:18px 20px 40px}
+.transport{display:flex;align-items:center;gap:9px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);padding:12px;border-radius:14px;margin-bottom:15px}.transport .time{font-variant-numeric:tabular-nums;font-size:17px;font-weight:700;min-width:112px}.transport input[type=range]{width:min(330px,35vw);accent-color:var(--accent)}.spacer{flex:1}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:15px;align-items:start}.maincol{min-width:0}.panel{background:linear-gradient(180deg,#151f34,#111a2c);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:15px}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 15px;border-bottom:1px solid var(--line)}.panelhead h2{font-size:14px;margin:0}.panelbody{padding:13px 15px}.muted{color:var(--muted)}.small{font-size:11px;color:var(--muted)}
+.tracktools{display:flex;gap:7px;flex-wrap:wrap}.timeline{overflow-x:auto}.ruler{height:28px;background:#0f1728;border-bottom:1px solid var(--line);position:relative;min-width:800px;margin-left:178px}.ruler span{position:absolute;top:5px;color:#8ea0bf;font-size:10px;border-left:1px solid #40506b;padding-left:4px;height:18px}.trackrow{display:grid;grid-template-columns:178px minmax(800px,1fr);min-height:105px;border-bottom:1px solid #24324a}.trackhead{padding:10px;background:#111a2b;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:7px}.tracktitle{display:flex;align-items:center;gap:7px;font-weight:700}.trackdot{width:9px;height:9px;border-radius:50%;background:var(--track-color)}.trackbuttons{display:flex;gap:4px}.trackbuttons button{font-size:10px;padding:4px 7px}.tracksettings{display:grid;grid-template-columns:1fr 1fr;gap:5px}.tracksettings label{font-size:10px;color:var(--muted)}.tracksettings input{width:100%;accent-color:var(--accent)}.tracklane{position:relative;min-height:105px;background-color:#0e1728;background-image:linear-gradient(90deg,transparent 0,transparent calc(100% - 1px),#263650 calc(100% - 1px));background-size:80px 100%;overflow:hidden}.clip{position:absolute;top:12px;height:78px;border:1px solid var(--clip-border);border-radius:7px;background:var(--clip-bg);overflow:hidden;min-width:25px;box-shadow:0 4px 14px #0005}.clip canvas{width:100%;height:100%;display:block;opacity:.92}.clipname{position:absolute;left:7px;top:4px;font-size:10px;color:#fff;text-shadow:0 1px 3px #000;pointer-events:none;white-space:nowrap;max-width:calc(100% - 14px);overflow:hidden}
+.playhead{position:absolute;top:0;bottom:0;width:2px;background:#ff6e80;z-index:8;pointer-events:none;box-shadow:0 0 8px #ff6e80}.playhead:before{content:"";position:absolute;top:0;left:-4px;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid #ff6e80}
+.trackempty{padding:24px;text-align:center;color:#687b9c}
+.side .panel{position:sticky;top:10px}.sidegrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.control{display:flex;flex-direction:column;gap:4px}.control label{font-size:11px;color:var(--muted)}.control input[type=range]{width:100%;accent-color:var(--accent)}.control input[type=number],.control select{width:100%;background:#0d1627;border:1px solid var(--line);color:var(--text);padding:7px;border-radius:7px}.fxrow{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid #25334b}.fxrow:last-child{border:0}.fxrow label{font-size:12px}.fxrow input{accent-color:var(--accent)}
+.mastermeter{height:8px;background:#26334a;border-radius:9px;overflow:hidden}.mastermeter div{height:100%;width:0;background:linear-gradient(90deg,#35d6a5,#ffc66d,#ff6479)}
+.bottomgrid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.dropzone{border:1px dashed #536789;border-radius:11px;padding:16px;text-align:center;color:var(--muted);background:#101a2c}.dropzone strong{color:var(--text)}.dropzone input{display:none}.dropzone label{display:inline-block;margin-top:8px;cursor:pointer;background:#253653;padding:8px 12px;border-radius:8px;color:#fff}
+input[type=checkbox]{accent-color:var(--accent)}.pill{font-size:10px;border:1px solid var(--line);padding:3px 7px;border-radius:20px;color:var(--muted)}
+.modalback{position:fixed;inset:0;background:#0009;display:none;place-items:center;z-index:30;padding:15px}.modal{max-width:620px;width:100%;background:#17233a;border:1px solid #40516f;border-radius:15px;padding:20px;max-height:85vh;overflow:auto}.modal h2{margin:0 0 8px}.modal p{color:var(--muted)}.modal pre{white-space:pre-wrap;color:#c8d5ed;background:#0c1423;padding:12px;border-radius:8px}
+footer{text-align:center;color:#7183a2;font-size:11px;padding:10px}
+@media(max-width:1050px){.layout{grid-template-columns:1fr}.side .panel{position:static}.sidegrid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:700px){header{padding:15px}.wrap{padding:12px}.bottomgrid{grid-template-columns:1fr}.sidegrid{grid-template-columns:1fr 1fr}.trackrow{grid-template-columns:145px minmax(700px,1fr)}.ruler{margin-left:145px}.transport input[type=range]{width:100px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand"><div class="logo">♪</div><div><h1>Indranil Multi-Track Music Production Studio</h1><p>Browser-based recording · editing · mixing · mastering</p></div></div>
+ <div class="header-actions">
+  <button id="newProject">＋ New project</button><button id="saveProject">Save project</button><button id="loadProject">Open project</button><input id="projectFile" type="file" accept=".json,application/json" hidden>
+  <button id="helpBtn">Studio guide</button>
+ </div>
+</header>
+<div class="wrap">
+ <section class="transport">
+  <button class="primary" id="playBtn">▶ Play</button><button id="stopBtn">■ Stop</button><button id="recordBtn" class="danger">● Record vocal</button>
+  <span class="time" id="timeReadout">00:00.0 / 00:00.0</span>
+  <input id="seek" type="range" min="0" max="1000" value="0">
+  <div class="spacer"></div>
+  <label class="small">Tempo <input id="tempo" type="number" min="40" max="240" value="120" style="width:58px;background:#0d1627;border:1px solid #2a3854;color:white;padding:5px;border-radius:6px"> BPM</label>
+  <span class="pill" id="status">Ready</span>
+ </section>
+ <div class="layout">
+  <main class="maincol">
+   <section class="panel">
+    <div class="panelhead"><h2>Arrangement timeline <span class="pill">drag clips to reposition</span></h2><div class="tracktools"><button id="addAudio">＋ Audio track</button><button id="addRecord">＋ Vocal track</button><button id="zoomOut">−</button><button id="zoomIn">＋</button></div></div>
+    <div class="timeline" id="timeline">
+     <div class="ruler" id="ruler"></div><div id="tracks"><div class="trackempty" id="emptyState">Import an instrumental or create a vocal track to begin your song.</div></div>
+    </div>
+    <div class="panelbody small">Tip: click the timeline ruler to move the playhead. Drag a clip horizontally to change its start position.</div>
+   </section>
+   <div class="bottomgrid">
+    <section class="panel"><div class="panelhead"><h2>Import audio</h2><span class="pill">WAV · MP3 · M4A · OGG · WebM</span></div><div class="panelbody">
+     <div class="dropzone" id="dropzone"><strong>Drop instrumental, vocal, or stem files here</strong><br><span class="small">Each imported file becomes its own track.</span><br><label for="audioFiles">Choose audio files</label><input id="audioFiles" type="file" accept="audio/*" multiple></div>
+    </div></section>
+    <section class="panel"><div class="panelhead"><h2>Track actions</h2></div><div class="panelbody">
+     <div class="tracktools"><button id="duplicateTrack">Duplicate selected</button><button id="deleteTrack" class="danger">Delete selected</button><button id="trimStart">Trim to playhead</button><button id="resetTrim">Reset trim</button></div>
+     <p class="small" id="selectedInfo">Select a track to edit its clips and effects.</p>
+    </div></section>
+   </div>
+   <section class="panel"><div class="panelhead"><h2>Master output & export</h2><span class="pill">offline render</span></div><div class="panelbody">
+    <div class="sidegrid">
+     <div class="control"><label>Master volume <b id="masterVolVal">0 dB</b></label><input id="masterVol" type="range" min="-24" max="6" value="0"></div>
+     <div class="control"><label>Master compressor</label><input id="masterComp" type="range" min="0" max="100" value="35"></div>
+     <div class="control"><label>Master limiter ceiling</label><input id="limiter" type="range" min="-6" max="0" step=".1" value="-1"></div>
+     <div class="control"><label>Master reverb</label><input id="masterReverb" type="range" min="0" max="50" value="0"></div>
+    </div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="good" id="exportWav">Render & export WAV</button><button id="exportMp3">Export MP3 (if encoder available)</button><button id="quickPreview">Preview master</button></div>
+    <p class="small">WAV export renders the full arrangement at 44.1 kHz, 16-bit stereo. MP3 export requires an optional MP3 encoder and is not included in this offline single-file build.</p>
+    <div class="mastermeter" style="margin-top:10px"><div id="masterMeterFill"></div></div>
+   </div></section>
+  </main>
+  <aside class="side">
+   <section class="panel"><div class="panelhead"><h2>Selected track mixer</h2><span class="pill" id="selectedTrackName">No track</span></div><div class="panelbody">
+    <div class="sidegrid">
+     <div class="control"><label>Gain <b id="gainVal">0 dB</b></label><input id="gain" type="range" min="-36" max="12" value="0"></div>
+     <div class="control"><label>Pan <b id="panVal">Center</b></label><input id="pan" type="range" min="-100" max="100" value="0"></div>
+     <div class="control"><label>Low EQ <b id="lowVal">0 dB</b></label><input id="low" type="range" min="-18" max="18" value="0"></div>
+     <div class="control"><label>Mid EQ <b id="midVal">0 dB</b></label><input id="mid" type="range" min="-18" max="18" value="0"></div>
+     <div class="control"><label>High EQ <b id="highVal">0 dB</b></label><input id="high" type="range" min="-18" max="18" value="0"></div>
+     <div class="control"><label>Reverb <b id="reverbVal">0%</b></label><input id="reverb" type="range" min="0" max="100" value="0"></div>
+     <div class="control"><label>Delay <b id="delayVal">0%</b></label><input id="delay" type="range" min="0" max="100" value="0"></div>
+     <div class="control"><label>Chorus <b id="chorusVal">0%</b></label><input id="chorus" type="range" min="0" max="100" value="0"></div>
+     <div class="control"><label>Compression <b id="compressionVal">0%</b></label><input id="compression" type="range" min="0" max="100" value="0"></div>
+     <div class="control"><label>Saturation <b id="saturationVal">0%</b></label><input id="saturation" type="range" min="0" max="100" value="0"></div>
+    </div>
+    <div class="fxrow"><label><input type="checkbox" id="trackMute"> Mute track</label><label><input type="checkbox" id="trackSolo"> Solo track</label></div>
+    <div class="fxrow"><label><input type="checkbox" id="reverse"> Reverse audio (render only)</label><label><input type="checkbox" id="normalize"> Normalize track</label></div>
+    <div style="margin-top:10px"><label class="small">Track preset</label><select id="preset" style="width:100%;padding:8px;background:#0d1627;color:white;border:1px solid #2a3854;border-radius:7px"><option value="">Choose preset…</option><option value="vocal">Studio Vocal</option><option value="warm">Warm Vocal</option><option value="hall">Concert Hall</option><option value="radio">Radio Voice</option><option value="karaoke">Karaoke Instrumental</option></select></div>
+   </div></section>
+   <section class="panel"><div class="panelhead"><h2>Recording input</h2></div><div class="panelbody">
+    <div class="control"><label>Microphone</label><select id="micSelect" style="width:100%;padding:8px;background:#0d1627;color:white;border:1px solid #2a3854;border-radius:7px"><option value="">Default microphone</option></select></div>
+    <div class="fxrow"><label><input id="monitorMic" type="checkbox"> Monitor mic (may cause feedback)</label></div>
+    <p class="small">Recording captures microphone audio into a new vocal track. Use headphones when monitoring.</p>
+   </div></section>
+  </aside>
+ </div>
+ <footer>Indranil Multi-Track Music Production Studio · Runs locally in your browser. Your audio stays on your device.</footer>
+</div>
+<div class="modalback" id="helpModal"><div class="modal"><h2>Studio guide</h2>
+<p>This is a standalone, local browser-based multitrack workspace.</p>
+<pre>1. Import one or more audio files. Each file becomes a separate track.
+2. Add a Vocal track and record from your microphone.
+3. Select a track to adjust gain, pan, EQ, reverb, delay, chorus, compression and saturation.
+4. Drag clips on the timeline to align them. Use Trim to playhead to set a clip's in-point.
+5. Play the arrangement, then Render & export WAV for the final stereo mix.
+6. Save project exports a JSON project file with embedded audio data; Open project restores it.</pre>
+<p>Use headphones while recording. Browser microphone access requires HTTPS or localhost. Audio processing and final mix depend on your browser and device performance.</p>
+<button id="closeHelp" class="primary">Got it</button></div></div>
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+let ctx=null, tracks=[], selectedId=null, zoom=80, duration=0, playhead=0, playing=false, playStartedAt=0, raf=0, sources=[], micStream=null, recorder=null, recChunks=[], recTrackId=null, previewNodes=[];
+const COLORS=['#4279dc','#24a88d','#bd7ae8','#d18c4b','#d45d7b','#6e9dba'];
+const paramIds=['gain','pan','low','mid','high','reverb','delay','chorus','compression','saturation'];
+const defaults=()=>({gain:0,pan:0,low:0,mid:0,high:0,reverb:0,delay:0,chorus:0,compression:0,saturation:0,mute:false,solo:false,reverse:false,normalize:false});
+function audioContext(){if(!ctx)ctx=new (window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();return ctx}
+function uid(){return 't'+Math.random().toString(36).slice(2,10)}
+function fmt(s){s=Math.max(0,s||0);return String(Math.floor(s/60)).padStart(2,'0')+':'+(s%60).toFixed(1).padStart(4,'0')}
+function setStatus(s){$('status').textContent=s}
+function getTrack(id=selectedId){return tracks.find(t=>t.id===id)}
+function maxDuration(){return Math.max(1,...tracks.map(t=>t.start+(t.buffer?t.end-t.offset:0)))}
+function addTrack(name,buffer=null,color=null){const t={id:uid(),name,buffer,start:playhead,offset:0,end:buffer?buffer.duration:0,color:color||COLORS[tracks.length%COLORS.length],...defaults()};tracks.push(t);selectedId=t.id;render();syncControls();return t}
+function drawWave(canvas,buffer,color){const c=canvas.getContext('2d'),w=canvas.width= Math.max(1,canvas.clientWidth*devicePixelRatio),h=canvas.height=Math.max(1,canvas.clientHeight*devicePixelRatio);c.clearRect(0,0,w,h);c.fillStyle=color+'33';c.fillRect(0,0,w,h);if(!buffer)return;const data=buffer.getChannelData(0),step=Math.max(1,Math.floor(data.length/w)),mid=h/2;c.strokeStyle='#d9e8ff';c.globalAlpha=.8;c.beginPath();for(let x=0;x<w;x++){let mn=1,mx=-1;for(let j=0;j<step;j++){const v=data[x*step+j]||0;if(v<mn)mn=v;if(v>mx)mx=v}c.moveTo(x,mid+mn*mid*.83);c.lineTo(x,mid+mx*mid*.83)}c.stroke();c.globalAlpha=1}
+function render(){const container=$('tracks');container.innerHTML='';const emptyState=$('emptyState');if(emptyState)emptyState.style.display=tracks.length?'none':'block';$('ruler').innerHTML='';const dur=Math.max(30,Math.ceil(maxDuration()/10)*10);duration=dur;$('ruler').style.width=(dur*zoom)+'px';$('ruler').style.minWidth=(dur*zoom)+'px';for(let s=0;s<=dur;s+=5){const el=document.createElement('span');el.style.left=(s*zoom)+'px';el.textContent=fmt(s);$('ruler').append(el)}
+tracks.forEach(t=>{const row=document.createElement('div');row.className='trackrow';row.dataset.id=t.id;const head=document.createElement('div');head.className='trackhead';const title=document.createElement('div');title.className='tracktitle';const dot=document.createElement('i');dot.className='trackdot';dot.style.setProperty('--track-color',t.color);title.append(dot,document.createTextNode(t.name));head.append(title);
+const btns=document.createElement('div');btns.className='trackbuttons';[['S',()=>{t.solo=!t.solo;render();syncControls();}],['M',()=>{t.mute=!t.mute;render();syncControls();}],['×',()=>removeTrack(t.id)]].forEach(([label,fn])=>{const b=document.createElement('button');b.textContent=label;b.onclick=e=>{e.stopPropagation();fn()};btns.append(b)});head.append(btns);
+const settings=document.createElement('div');settings.className='tracksettings';[['Vol',t.gain,'gain'],['Pan',t.pan,'pan']].forEach(([label,val,key])=>{const l=document.createElement('label');l.textContent=label;const inp=document.createElement('input');inp.type='range';inp.min=key==='gain'?-36:-100;inp.max=key==='gain'?12:100;inp.value=val;inp.oninput=()=>{t[key]=+inp.value;if(t.id===selectedId)syncControls()};l.append(inp);settings.append(l)});head.append(settings);head.onclick=()=>selectTrack(t.id);
+const lane=document.createElement('div');lane.className='tracklane';lane.dataset.id=t.id;lane.style.minWidth=(dur*zoom)+'px';lane.onclick=e=>{if(e.target===lane){playhead=Math.max(0,(e.offsetX/zoom));updatePlayhead();}};const clip=document.createElement('div');clip.className='clip';clip.style.left=(t.start*zoom)+'px';clip.style.width=(Math.max(.2,t.end-t.offset)*zoom)+'px';clip.style.setProperty('--clip-bg',t.color+'55');clip.style.setProperty('--clip-border',t.color);clip.title=t.name+' · drag to move';const canvas=document.createElement('canvas');clip.append(canvas);const name=document.createElement('span');name.className='clipname';name.textContent=t.name;clip.append(name);clip.addEventListener('pointerdown',e=>{e.stopPropagation();selectTrack(t.id);const startX=e.clientX,orig=t.start;clip.setPointerCapture(e.pointerId);const move=ev=>{t.start=Math.max(0,orig+(ev.clientX-startX)/zoom);clip.style.left=t.start*zoom+'px';};const up=()=>{clip.removeEventListener('pointermove',move);clip.removeEventListener('pointerup',up);render()};clip.addEventListener('pointermove',move);clip.addEventListener('pointerup',up)});lane.append(clip);row.append(head,lane);container.append(row);requestAnimationFrame(()=>drawWave(canvas,t.buffer,t.color));if(t.id===selectedId)row.style.outline='1px solid #7195ff';});
+const ph=document.createElement('div');ph.className='playhead';ph.id='playhead';ph.style.left=(playhead*zoom+178)+'px';$('timeline').append(ph);$('timeline').style.position='relative';updatePlayhead();$('selectedTrackName').textContent=getTrack()?.name||'No track';}
+function updatePlayhead(){const ph=$('playhead');if(ph)ph.style.left=(playhead*zoom+178)+'px';$('seek').value=duration?playhead/duration*1000:0;$('timeReadout').textContent=fmt(playhead)+' / '+fmt(maxDuration());}
+function selectTrack(id){selectedId=id;syncControls();render()}
+function syncControls(){const t=getTrack();$('selectedTrackName').textContent=t?.name||'No track';$('selectedInfo').textContent=t?`${t.name} · ${t.buffer?fmt(t.buffer.duration)+' audio':'empty track'} · starts at ${fmt(t.start)}`:'Select a track to edit its clips and effects.';paramIds.forEach(k=>{const el=$(k);el.disabled=!t;if(t){el.value=t[k];$(k+'Val').textContent=k==='pan'?(t.pan===0?'Center':(t.pan<0?'L ':'R ')+Math.abs(t.pan)+'%'):k==='gain'?t.gain+' dB':k==='reverb'||k==='delay'||k==='chorus'||k==='compression'||k==='saturation'?t[k]+'%':t[k]+' dB'}});['trackMute','trackSolo','reverse','normalize'].forEach(k=>{$(k).disabled=!t;if(t)$(k).checked=t[k==='trackMute'?'mute':k==='trackSolo'?'solo':k]});}
+function removeTrack(id){tracks=tracks.filter(t=>t.id!==id);if(selectedId===id)selectedId=tracks[0]?.id||null;render();syncControls()}
+async function decodeFile(file){const array=await file.arrayBuffer();const ac=audioContext();try{return await ac.decodeAudioData(array.slice(0))}catch(err){throw new Error('This browser could not decode the audio data. The MP3 may use an unsupported/corrupt encoding; try opening it in Chrome/Edge or converting it to WAV (44.1 kHz PCM) and importing again. '+(err?.message||''))}}
+async function importFiles(files){for(const f of files){if(!(f.type.startsWith('audio/')||/\.(mp3|wav|m4a|aac|ogg|webm|flac)$/i.test(f.name)))continue;try{setStatus('Importing '+f.name);const b=await decodeFile(f);const t=addTrack(f.name.replace(/\.[^.]+$/,''),b);t.end=b.duration}catch(e){alert('Could not decode '+f.name+': '+e.message)}}setStatus('Ready');render()}
+function buildImpulse(ac,seconds=2.2,decay=2.4){const len=Math.floor(ac.sampleRate*seconds),buf=ac.createBuffer(2,len,ac.sampleRate);for(let ch=0;ch<2;ch++){const d=buf.getChannelData(ch);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,decay)}return buf}
+function makeSaturationCurve(amount){const n=2048,c=new Float32Array(n),k=amount*90;for(let i=0;i<n;i++){const x=i*2/n-1;c[i]=(1+k)*x/(1+k*Math.abs(x))}return c}
+function makeTrackGraph(ac,t,dest,when,offset,dur,offline=false){if(!t.buffer||t.mute)return null;const src=ac.createBufferSource();src.buffer=t.buffer;if(t.reverse){const b=ac.createBuffer(t.buffer.numberOfChannels,t.buffer.length,t.buffer.sampleRate);for(let ch=0;ch<b.numberOfChannels;ch++){const a=t.buffer.getChannelData(ch),d=b.getChannelData(ch);for(let i=0;i<a.length;i++)d[i]=a[a.length-1-i]}src.buffer=b}
+const gain=ac.createGain();gain.gain.value=Math.pow(10,t.gain/20);const pan=ac.createStereoPanner?ac.createStereoPanner():null;if(pan)pan.pan.value=t.pan/100;
+const low=ac.createBiquadFilter();low.type='lowshelf';low.frequency.value=180;low.gain.value=t.low;const mid=ac.createBiquadFilter();mid.type='peaking';mid.frequency.value=1200;mid.Q.value=.8;mid.gain.value=t.mid;const high=ac.createBiquadFilter();high.type='highshelf';high.frequency.value=5500;high.gain.value=t.high;
+const comp=ac.createDynamicsCompressor();comp.threshold.value=-8-(t.compression*.55);comp.ratio.value=1+t.compression*.08;comp.attack.value=.006;comp.release.value=.18;
+const sh=ac.createWaveShaper();sh.curve=makeSaturationCurve(t.saturation/100);sh.oversample='2x';
+const dry=ac.createGain();const wet=ac.createGain();wet.gain.value=t.reverb/100*.45;const con=ac.createConvolver();con.buffer=buildImpulse(ac,2.3,2.6);
+const delay=ac.createDelay(1.5);delay.delayTime.value=.28;const fb=ac.createGain();fb.gain.value=t.delay/100*.42;const dg=ac.createGain();dg.gain.value=t.delay/100*.45;delay.connect(fb);fb.connect(delay);
+const chorusDelay=ac.createDelay(.05);chorusDelay.delayTime.value=.018;const chorusGain=ac.createGain();chorusGain.gain.value=t.chorus/100*.35;
+let chain=src;[low,mid,high,comp,sh,gain].forEach(n=>{chain.connect(n);chain=n});if(pan){chain.connect(pan);chain=pan}
+chain.connect(dry);dry.connect(dest);chain.connect(con);con.connect(wet);wet.connect(dest);chain.connect(delay);delay.connect(dg);dg.connect(dest);chain.connect(chorusDelay);chorusDelay.connect(chorusGain);chorusGain.connect(dest);
+const start=when+Math.max(0,t.start-playhead);const off=t.offset+Math.max(0,playhead-t.start);const remain=Math.max(0,t.end-off);const actual=Math.min(remain,dur-Math.max(0,t.start-playhead));if(actual>0)src.start(start,off,actual);return {src,nodes:[gain,pan,low,mid,high,comp,sh,dry,wet,con,delay,fb,dg,chorusDelay,chorusGain].filter(Boolean)}}
+function anySolo(){return tracks.some(t=>t.solo)}
+function stopPlayback(){playing=false;cancelAnimationFrame(raf);sources.forEach(s=>{try{s.stop()}catch(e){}});sources=[];$('playBtn').textContent='▶ Play';setStatus('Stopped')}
+function play(){if(playing){stopPlayback();return}if(!tracks.some(t=>t.buffer)){alert('Import audio or record a vocal track first.');return}const ac=audioContext();stopPlayback();playing=true;const startAt=ac.currentTime+.08;const max=maxDuration();tracks.filter(t=>t.buffer&&(!anySolo()||t.solo)).forEach(t=>{if(t.mute)return;const built=makeTrackGraph(ac,t,ac.destination,startAt,playhead,max-playhead);if(built)sources.push(built.src)});playStartedAt=performance.now();const base=playhead;$('playBtn').textContent='Ⅱ Pause';setStatus('Playing');const tick=()=>{if(!playing)return;playhead=Math.min(max,base+(performance.now()-playStartedAt)/1000);updatePlayhead();if(playhead>=max){stopPlayback();playhead=0;updatePlayhead();return}raf=requestAnimationFrame(tick)};tick()}
+async function startRecording(){try{const ac=audioContext();const deviceId=$('micSelect').value;micStream=await navigator.mediaDevices.getUserMedia({audio:deviceId?{deviceId:{exact:deviceId},echoCancellation:false,noiseSuppression:false,autoGainControl:false}:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});recChunks=[];recorder=new MediaRecorder(micStream);const t=addTrack('Vocal take '+(tracks.length+1));recTrackId=t.id;recorder.ondataavailable=e=>{if(e.data.size)recChunks.push(e.data)};recorder.onstop=async()=>{try{const blob=new Blob(recChunks,{type:recorder.mimeType||'audio/webm'});const b=await decodeFile(blob);const tr=getTrack(recTrackId);if(tr){tr.buffer=b;tr.end=b.duration;tr.offset=0;tr.start=playhead}render();syncControls();setStatus('Recording imported')}catch(e){alert('Recording was saved but could not be decoded in this browser: '+e.message)}micStream.getTracks().forEach(x=>x.stop());micStream=null};recorder.start();$('recordBtn').textContent='■ Stop recording';$('recordBtn').classList.add('good');setStatus('Recording microphone…');if($('monitorMic').checked){const src=ac.createMediaStreamSource(micStream),g=ac.createGain();g.gain.value=.5;src.connect(g);g.connect(ac.destination);previewNodes=[src,g]}}catch(e){alert('Microphone access failed. Allow microphone permission and use HTTPS or localhost.\\n\\n'+e.message)}}
+function stopRecording(){if(recorder&&recorder.state!=='inactive')recorder.stop();recorder=null;$('recordBtn').textContent='● Record vocal';$('recordBtn').classList.remove('good');previewNodes.forEach(n=>{try{n.disconnect()}catch(e){}});previewNodes=[];setStatus('Finishing recording…')}
+async function renderMix(){if(!tracks.some(t=>t.buffer)){alert('No audio tracks to export.');return null}stopPlayback();setStatus('Rendering mix…');const sr=44100,dur=Math.max(...tracks.filter(t=>t.buffer).map(t=>t.start+t.end-t.offset),1)+1;const off=new OfflineAudioContext(2,Math.ceil(dur*sr),sr);const master=off.createGain();master.gain.value=Math.pow(10,(+$('masterVol').value)/20);const comp=off.createDynamicsCompressor();const amount=+$('masterComp').value;comp.threshold.value=-5-amount*.55;comp.ratio.value=1+amount*.09;comp.attack.value=.003;comp.release.value=.2;const limiter=off.createDynamicsCompressor();limiter.threshold.value=+$('limiter').value;limiter.knee.value=0;limiter.ratio.value=20;limiter.attack.value=.001;limiter.release.value=.08;master.connect(comp);comp.connect(limiter);limiter.connect(off.destination);
+const masterRev=+$('masterReverb').value;if(masterRev){const con=off.createConvolver();con.buffer=buildImpulse(off,2.5,2.8);const wet=off.createGain();wet.gain.value=masterRev/100*.25;master.connect(con);con.connect(wet);wet.connect(limiter)}
+const solo=anySolo();for(const t of tracks){if(!t.buffer||t.mute||(solo&&!t.solo))continue;const src=off.createBufferSource();let buf=t.buffer;if(t.reverse){buf=off.createBuffer(buf.numberOfChannels,buf.length,buf.sampleRate);for(let ch=0;ch<buf.numberOfChannels;ch++){const a=t.buffer.getChannelData(ch),d=buf.getChannelData(ch);for(let i=0;i<a.length;i++)d[i]=a[a.length-1-i]}}src.buffer=buf;
+const g=off.createGain();g.gain.value=Math.pow(10,t.gain/20);const pan=off.createStereoPanner();pan.pan.value=t.pan/100;const lo=off.createBiquadFilter();lo.type='lowshelf';lo.frequency.value=180;lo.gain.value=t.low;const mi=off.createBiquadFilter();mi.type='peaking';mi.frequency.value=1200;mi.Q.value=.8;mi.gain.value=t.mid;const hi=off.createBiquadFilter();hi.type='highshelf';hi.frequency.value=5500;hi.gain.value=t.high;const cp=off.createDynamicsCompressor();cp.threshold.value=-8-t.compression*.55;cp.ratio.value=1+t.compression*.08;const sh=off.createWaveShaper();sh.curve=makeSaturationCurve(t.saturation/100);sh.oversample='2x';src.connect(lo);lo.connect(mi);mi.connect(hi);hi.connect(cp);cp.connect(sh);sh.connect(g);g.connect(pan);pan.connect(master);
+if(t.reverb){const cv=off.createConvolver();cv.buffer=buildImpulse(off,2.3,2.5);const wg=off.createGain();wg.gain.value=t.reverb/100*.45;sh.connect(cv);cv.connect(wg);wg.connect(master)}
+if(t.delay){const d=off.createDelay(1);d.delayTime.value=.28;const fb=off.createGain();fb.gain.value=t.delay/100*.35;const wet=off.createGain();wet.gain.value=t.delay/100*.4;sh.connect(d);d.connect(wet);d.connect(fb);fb.connect(d);wet.connect(master)}
+if(t.chorus){const d=off.createDelay(.05);d.delayTime.value=.018;const wg=off.createGain();wg.gain.value=t.chorus/100*.3;sh.connect(d);d.connect(wg);wg.connect(master)}
+const start=Math.max(0,t.start);const offset=Math.max(0,t.offset);const length=Math.max(0,Math.min(t.end-offset,buf.duration-offset));if(length>0)src.start(start,offset,length)}
+try{const rendered=await off.startRendering();setStatus('Render complete');return rendered}catch(e){setStatus('Render failed');alert('Render failed: '+e.message);return null}}
+function wavBlob(buffer){const n=buffer.length,channels=2,sr=buffer.sampleRate,bytes=2,dataSize=n*channels*bytes,ab=new ArrayBuffer(44+dataSize),v=new DataView(ab);function str(o,s){for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i))}str(0,'RIFF');v.setUint32(4,36+dataSize,true);str(8,'WAVE');str(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,channels,true);v.setUint32(24,sr,true);v.setUint32(28,sr*channels*bytes,true);v.setUint16(32,channels*bytes,true);v.setUint16(34,16,true);str(36,'data');v.setUint32(40,dataSize,true);const l=buffer.getChannelData(0),r=buffer.numberOfChannels>1?buffer.getChannelData(1):l;let o=44;for(let i=0;i<n;i++){for(const x of [l[i],r[i]]){const s=Math.max(-1,Math.min(1,x));v.setInt16(o,s<0?s*32768:s*32767,true);o+=2}}return new Blob([ab],{type:'audio/wav'})}
+function download(blob,name){const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000)}
+async function exportWav(){const b=await renderMix();if(b){download(wavBlob(b),'indranil-final-mix.wav');setStatus('WAV exported')}}
+function bindRange(id,fn){$(id).addEventListener('input',()=>{const t=getTrack();if(!t)return;t[id]=+$(id).value;syncControls();if(fn)fn(t)})}
+paramIds.forEach(k=>bindRange(k));['trackMute','trackSolo','reverse','normalize'].forEach(k=>$(k).addEventListener('change',()=>{const t=getTrack();if(!t)return;t[k==='trackMute'?'mute':k==='trackSolo'?'solo':k]=$(k).checked;render()}));
+$('preset').onchange=()=>{const t=getTrack();if(!t)return;const p=$('preset').value;const sets={vocal:{low:1,mid:2,high:3,compression:28,reverb:12},warm:{low:3,mid:1,high:-2,compression:22,saturation:12,reverb:8},hall:{reverb:65,delay:12,high:1},radio:{low:-5,mid:5,high:2,compression:65,saturation:18},karaoke:{low:1,mid:-1,high:2,compression:8}};Object.assign(t,defaults(),sets[p]||{});syncControls();render()};
+$('playBtn').onclick=play;$('stopBtn').onclick=()=>{stopPlayback();playhead=0;updatePlayhead()};$('recordBtn').onclick=()=>recorder?stopRecording():startRecording();$('seek').oninput=()=>{playhead=+$('seek').value/1000*duration;updatePlayhead()};$('ruler').onclick=e=>{playhead=Math.max(0,e.offsetX/zoom);updatePlayhead()};
+$('audioFiles').onchange=e=>importFiles([...e.target.files]);$('addAudio').onclick=()=>$('audioFiles').click();$('addRecord').onclick=()=>{addTrack('Vocal track '+(tracks.length+1));syncControls()};$('addRecord').title='Create an empty track for a vocal take';
+$('duplicateTrack').onclick=()=>{const t=getTrack();if(!t)return;const copy={...t,id:uid(),name:t.name+' copy',start:t.start+1};tracks.push(copy);selectedId=copy.id;render();syncControls()};$('deleteTrack').onclick=()=>{if(selectedId)removeTrack(selectedId)};$('trimStart').onclick=()=>{const t=getTrack();if(!t)return;const delta=Math.max(0,playhead-t.start);t.offset=Math.min(t.end,t.offset+delta);t.start=playhead;render();syncControls()};$('resetTrim').onclick=()=>{const t=getTrack();if(!t)return;t.offset=0;t.end=t.buffer?.duration||0;render();syncControls()};
+$('zoomIn').onclick=()=>{zoom=Math.min(240,zoom*1.25);render()};$('zoomOut').onclick=()=>{zoom=Math.max(25,zoom/1.25);render()};
+$('masterVol').oninput=()=>$('masterVolVal').textContent=$('masterVol').value+' dB';$('exportWav').onclick=exportWav;$('exportMp3').onclick=()=>alert('MP3 encoding is not bundled in this standalone version. Export WAV, then convert to MP3 with your preferred audio encoder.');$('quickPreview').onclick=play;
+$('dropzone').ondragover=e=>{e.preventDefault();$('dropzone').style.borderColor='#7c9cff'};$('dropzone').ondragleave=()=>$('dropzone').style.borderColor='';$('dropzone').ondrop=e=>{e.preventDefault();$('dropzone').style.borderColor='';importFiles([...e.dataTransfer.files])};
+$('saveProject').onclick=async()=>{const data={version:1,title:'Indranil Multi-Track Project',tempo:+$('tempo').value,master:{volume:+$('masterVol').value,compression:+$('masterComp').value,limiter:+$('limiter').value,reverb:+$('masterReverb').value},tracks:[]};for(const t of tracks){let base={...t,buffer:null};if(t.buffer){const wav=wavBlob(t.buffer);base.audio=await blobToBase64(wav);base.audioType='audio/wav'}data.tracks.push(base)}download(new Blob([JSON.stringify(data)],{type:'application/json'}),'indranil-project.json');setStatus('Project saved')};
+function blobToBase64(blob){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(blob)})}
+$('loadProject').onclick=()=>$('projectFile').click();$('projectFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const p=JSON.parse(await f.text());tracks=[];for(const raw of p.tracks||[]){const t={...raw,buffer:null};if(raw.audio){const b64=raw.audio.split(',')[1],bin=atob(b64),arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);t.buffer=await audioContext().decodeAudioData(arr.buffer)}delete t.audio;delete t.audioType;tracks.push(t)}$('tempo').value=p.tempo||120;if(p.master){$('masterVol').value=p.master.volume??0;$('masterComp').value=p.master.compression??35;$('limiter').value=p.master.limiter??-1;$('masterReverb').value=p.master.reverb??0}$('masterVolVal').textContent=$('masterVol').value+' dB';selectedId=tracks[0]?.id||null;render();syncControls();setStatus('Project loaded')}catch(err){alert('Could not open project: '+err.message)}};
+$('newProject').onclick=()=>{if(tracks.length&&!confirm('Start a new project? Unsaved changes will be lost.'))return;stopPlayback();tracks=[];selectedId=null;playhead=0;render();syncControls();setStatus('New project')};
+$('helpBtn').onclick=()=>$('helpModal').style.display='grid';$('closeHelp').onclick=()=>$('helpModal').style.display='none';$('helpModal').onclick=e=>{if(e.target===$('helpModal'))$('helpModal').style.display='none'};
+async function listMics(){if(!navigator.mediaDevices?.enumerateDevices)return;try{const ds=await navigator.mediaDevices.enumerateDevices();$('micSelect').innerHTML='<option value="">Default microphone</option>';ds.filter(d=>d.kind==='audioinput').forEach((d,i)=>{const o=document.createElement('option');o.value=d.deviceId;o.textContent=d.label||'Microphone '+(i+1);$('micSelect').append(o)})}catch(e){}}
+if(navigator.mediaDevices?.addEventListener)navigator.mediaDevices.addEventListener('devicechange',listMics);
+listMics();render();syncControls();$('masterVolVal').textContent='0 dB';
+})();
+</script>
+</body>
+</html>
